@@ -7,31 +7,64 @@ def find_language_information(languages, language_name)
   #   ruby: { initial_release: 'December 25, 1996', is_beautiful?: true },
   #   javascript: { initial_release: 'December 4, 1995', is_beautiful?: false }
   # }
+  languages.each { |name, data|
+    if name == language_name
+      return data
+    end
+}
 end
 
 def add_information_about_language(languages, language_name, info_key, info_value)
   # Take languages and add the key/value pair info_key/info_value to the nested
   # hash of language_name, then return the updated languages hash
+  languages.clone.each { |name, data|
+    if name == language_name
+      data[info_key] = info_value
+    end
+}
+return languages
 end
 
 def add_language(languages, language_name, language_info_value)
   # Take languages and add the key/value pair language_name/language_info_value
   # to it, then return languages
+  languages.clone.each { |name, data| 
+    languages[language_name] = language_info_value
+}
+return languages
 end
 
 def delete_information_about_language(languages, language_name, info_key)
   # Take languages and delete the key/value pair with key info_key from
   # language_name, then return languages
+  languages.each { |name, data|
+    if name == language_name
+      data.delete(info_key)
+    end
+  }
+  return languages
 end
 
 def delete_language(languages, language_name)
   # Take languages and delete the language_name key/value pair, then return
   # languages
+  languages.each {
+    languages.delete(language_name)
+  }
+  return languages
 end
 
 def find_beautiful_languages(languages)
   # Take languages and return a hash containing only languages which have the
   # key/value pair { is_beautiful?: true } listed in their information
+  languages.each { |name, data|
+    data.each {|key, value|
+    if value == false
+      languages.delete(name)
+    end
+    }
+  }
+  return languages
 end
 
 def find_language_facts(languages, language_name, fact_index = 0)
@@ -50,4 +83,19 @@ def find_language_facts(languages, language_name, fact_index = 0)
   #                 initial_release: 'December 4, 1995',
   #                 is_beautiful?: false }
   # }
+  languages.each { |name, data|
+    if name == language_name
+      data.each { |facts, value|
+      if language_name == :ruby
+        return value[fact_index]
+      end
+      if language_name == :javascript
+        return value[fact_index]
+      end
+      } 
+    end
+    if language_name == :python
+        return nil
+    end
+  }
 end
